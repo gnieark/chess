@@ -1,0 +1,17 @@
+{
+    "name": "gnieark/chess",
+    "description": "chess php",
+    "type": "library",
+    "require": {
+        "php": ">=7.4",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "files": ["autoload.php"]
+    },
+    "minimum-stability": "stable",
+    "license": "MIT"
+}

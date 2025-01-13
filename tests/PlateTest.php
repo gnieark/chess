@@ -88,6 +88,9 @@ class PlateTest extends TestCase {
     }
     public function testInitializeGame(): void {
         $reflection = new ReflectionClass($this->game);
-        
+        $board = $this->game->start()->get_plate();
+
+
+
     }
 }

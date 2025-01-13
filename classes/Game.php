@@ -4,7 +4,7 @@ class Game{
     private Plate $plate;
 
     public function __construct(){
-        $this->set_plate = (new Plate() );
+        $this->plate = new Plate(); // Initialize plate
     }
 
     public function set_plate(Plate $plate): Game {
@@ -20,7 +20,7 @@ class Game{
     }
     public function start() : Game {
         $this->currentPlayer = true;
-        $this->Plate->initializeBoardWithPieces();
+        $this->plate->initializeBoardWithPieces();
         return $this;
     }
     public function get_current_player_txt(){
