@@ -41,4 +41,4 @@ jobs:
         fi
 
     - name: Run PHPUnit
-      run: vendor/bin/phpunit test/PlateTest.php
+      run: vendor/bin/phpunit tests/PlateTest.php
