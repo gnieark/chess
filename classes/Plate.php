@@ -8,71 +8,47 @@ class Plate {
     private array $board;
 
     public function __construct() {
-        $this->initializeBoard();
+        $this->initializeBoard(true);
     }
 
     /**
      * Initialise le plateau avec des cases vides.
+     * 
+     * 7 | | | | | | |63|
+     * 6 | | | | | | | |
+     * 5 | | | | | | | |
+     * 4 | | | | | | | |
+     * 3 | | | | | | | |
+     * 2 | | | | | | | |
+     * 1 |8| | | | | | |
+     * 0 |0| | | | | | |
+     *   |a|b|c|d|e|f|g|
      */
-    private function initializeBoard(): void {
+
+    public function getCellIndexByCoords(int $x,int $y) :int{
+        return $x + $y *8;
+    }
+    private function getCellIndexByPNGNotation(string $str) : int{
+
+    }
+
+    private function initializeBoard(bool $withPieces): void {
         $this->board = [];
-        for ($row = 0; $row < self::SIZE; $row++) {
-            $this->board[$row] = [];
-            for ($col = 0; $col < self::SIZE; $col++) {
-                $this->board[$row][$col] = null; // Une case vide est représentée par `null`
-            }
+        for( $i = 0; $i<56; $i++){
+            $this->board[$i] = null;
+        }
+        if( $withPieces ){
+            $this->initializeBoardWithPieces();
         }
     }
     
     public function initializeBoardWithPieces(): void {
-        // Place les pions
-        for ($col = 0; $col < self::SIZE; $col++) {
-            $this->placePiece(new Pawn('white'), 6, $col); // Pions blancs
-            $this->placePiece(new Pawn('black'), 1, $col); // Pions noirs
-        }
 
-        // Place les tours
-        $this->placePiece(new Rook('white'), 7, 0);
-        $this->placePiece(new Rook('white'), 7, 7);
-        $this->placePiece(new Rook('black'), 0, 0);
-        $this->placePiece(new Rook('black'), 0, 7);
-
-        // Place les cavaliers
-        $this->placePiece(new Knight('white'), 7, 1);
-        $this->placePiece(new Knight('white'), 7, 6);
-        $this->placePiece(new Knight('black'), 0, 1);
-        $this->placePiece(new Knight('black'), 0, 6);
-
-        // Place les fous
-        $this->placePiece(new Bishop('white'), 7, 2);
-        $this->placePiece(new Bishop('white'), 7, 5);
-        $this->placePiece(new Bishop('black'), 0, 2);
-        $this->placePiece(new Bishop('black'), 0, 5);
-
-        // Place les dames
-        $this->placePiece(new Queen('white'), 7, 3);
-        $this->placePiece(new Queen('black'), 0, 3);
-
-        // Place les rois
-        $this->placePiece(new King('white'), 7, 4);
-        $this->placePiece(new King('black'), 0, 4);
     }
 
-
-    /**
-     * Place une pièce sur le plateau.
-     * 
-     * @param Piece $piece La pièce à placer.
-     * @param int $row Ligne de la case (0-7).
-     * @param int $col Colonne de la case (0-7).
-     * @return bool Retourne true si le placement a réussi, false sinon.
-     */
-    public function placePiece(Piece $piece, int $row, int $col): bool {
-        if ($this->isValidPosition($row, $col) && $this->board[$row][$col] === null) {
-            $this->board[$row][$col] = $piece;
-            return true;
-        }
-        return false;
+    public function placePiece(Piece $piece, int $cellIndex): Plate {
+            $this->board[$cellIndex] = $piece;
+            return $this;
     }
 
     public function placePieceByPGNNotation(Piece $piece, string $cell): bool {
