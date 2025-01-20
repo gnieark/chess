@@ -20,8 +20,25 @@ class PlateTest extends TestCase {
                 $cellsIndex[] = $index;
             }
         }
+    }
+    public function testgetCellIndexByPNGNotation(): void{
+        $cellsIndexes = array();
+        $cols = array("a","b","c","d","e","g","h");
+        foreach ($cols as $col){
+            for ($i = 0; $i < 8; $i++){
+                $PGN = $col.$i;
+                $index = $this->plate->getCellIndexByPNGNotation($PGN);
+                $this->assertNotContains( $index, $cellsIndexes);
+            }
 
+        }
 
-
+    }
+    public function testPlacePlieces(): void {
+        $nPlate = new Plate();
+        $nPlate -> placePiece(new King(false), 43);
+        $nPlate -> movePiece(43,50);
+        $p43 = $nPlate(43);
+    
     }
 }
