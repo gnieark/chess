@@ -26,7 +26,7 @@ class PlateTest extends TestCase {
     }
 
     public function testPlacePiece(): void {
-        $rook = new Rook('white');
+        $rook = new Rook(true);
         $result = $this->plate->placePiece($rook, 0, 0);
 
         $this->assertTrue($result, 'La pièce doit être placée avec succès.');
