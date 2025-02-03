@@ -38,7 +38,9 @@ class PlateTest extends TestCase {
         $nPlate = new Plate();
         $nPlate -> placePiece(new King(false), 43);
         $nPlate -> movePiece(43,50);
-        $p43 = $nPlate(43);
+        $this->assertNull($nPlate->getPiece(43));
+        $this->assertInstanceOf('King', $nPlate->getPiece(50) );
+        
     
     }
 }
