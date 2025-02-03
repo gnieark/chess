@@ -69,5 +69,13 @@ class Plate {
         $this->board[$indexOrigi] = null;
         return $this;
     }
+/*
+    public function listAvailableDestinations(int $origin): array{
+        $this->getPiece($origin)->getAvailableDestinationsIfEmptyFrom($origin);
 
+
+
+        
+    }
+*/
 }

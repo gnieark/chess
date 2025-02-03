@@ -1,4 +1,5 @@
 <?php
-class Bishop extends Piece {
+class Bishop extends Piece{
+
 
 }
