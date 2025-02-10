@@ -54,5 +54,26 @@ class PlateTest extends TestCase {
                 $this->assertLessThan(64, $movement->get_dest());
             }
         }
+        $nPlate = new Plate();
+        $nPlate -> placePiece(new King(false), 1);
+        $movements  = $nPlate -> getPiece(1)->get_available_destinations(1);
+        $availabledestsMustBe = array(0,2,8,9,10);
+        $testDests = array();
+        foreach($movements as $movement){
+            $this->assertContains($movement->get_dest(), $availabledestsMustBe);
+            $this->assertNotContains( $movement->get_dest(),$testDests );
+            $testDests[] = $movement->get_dest();
+        }
+
+        $nPlate = new Plate();
+        $nPlate -> placePiece(new King(false), 63);
+        $movements  = $nPlate -> getPiece(63)->get_available_destinations(63);
+        $availabledestsMustBe = array(62,54,55);
+        $testDests = array();
+        foreach($movements as $movement){
+            $this->assertContains($movement->get_dest(), $availabledestsMustBe);
+            $this->assertNotContains( $movement->get_dest(),$testDests );
+            $testDests[] = $movement->get_dest();
+        }
     }
 }
