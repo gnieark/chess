@@ -76,4 +76,29 @@ class PlateTest extends TestCase {
             $testDests[] = $movement->get_dest();
         }
     }
+
+    public function testKnightMoves(): void {
+        for($i = 0; $i<64; $i++ ){
+            $nPlate = new Plate();
+            $nPlate -> placePiece(new Knight(false), $i);
+            $movements  = $nPlate -> getPiece($i)->get_available_destinations($i);
+            $this->assertLessThan(9, count($movements) );
+            foreach($movements as $movement){
+                $this->assertGreaterThan(-1, $movement->get_dest());
+                $this->assertLessThan(64, $movement->get_dest());
+            }
+        }
+
+        $nPlate = new Plate();
+        $nPlate -> placePiece(new Knight(false), 63);
+        $movements  = $nPlate -> getPiece(63)->get_available_destinations(63);
+        $availabledestsMustBe = array(53,46);
+        $testDests = array();
+        foreach($movements as $movement){
+            $this->assertContains($movement->get_dest(), $availabledestsMustBe);
+            $this->assertNotContains( $movement->get_dest(),$testDests );
+            $testDests[] = $movement->get_dest();
+        }
+
+    }
 }
