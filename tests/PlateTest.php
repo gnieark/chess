@@ -43,4 +43,16 @@ class PlateTest extends TestCase {
         
     
     }
+    public function testKingMoves(): void {
+        for($i = 0; $i<64; $i++ ){
+            $nPlate = new Plate();
+            $nPlate -> placePiece(new King(false), $i);
+            $movements  = $nPlate -> getPiece($i)->get_available_destinations($i);
+            $this->assertLessThan(9, count($movements) );
+            foreach($movements as $movement){
+                $this->assertGreaterThan(-1, $movement->get_dest());
+                $this->assertLessThan(64, $movement->get_dest());
+            }
+        }
+    }
 }
