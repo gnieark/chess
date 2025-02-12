@@ -4,6 +4,7 @@ class Pawn extends Piece{
     public function get_available_destinations($current): array {
         $mvts = array();
         if( $this -> isWhite() ){
+
             if(($current > 7) && ($current <16)){
                 //the pawn is on the second row
                 $mvt = new Movement();
@@ -18,8 +19,25 @@ class Pawn extends Piece{
                 $mvt->set_origin($current)
                     ->set_dest($current + 8 )
                     ->set_destCanBeAnOpponent(false);
-            }
+                $mvts[] = $mvt;
 
+                if( fmod( $current , 8 ) > 0  ){
+                    $mvt = new Movement();
+                    $mvt->set_origin($current)
+                        ->set_dest($current + 7 )
+                        ->set_destMustBeAnOpponent(true);
+                    $mvts[] = $mvt;
+
+                }
+                if( fmod( $current , 8 ) < 7   ){
+                    $mvt = new Movement();
+                    $mvt->set_origin($current)
+                        ->set_dest($current + 9 )
+                        ->set_destMustBeAnOpponent(true);
+                    $mvts[] = $mvt;
+
+                }
+            }
 
         }else{
 
