@@ -101,4 +101,42 @@ class PlateTest extends TestCase {
         }
 
     }
+    public function testPawnMoves(): void {
+        // Test des pions blancs
+        for ($i = 8; $i < 16; $i++) {
+            $nPlate = new Plate();
+            $nPlate->placePiece(new Pawn(true), $i);
+            $movements = $nPlate->getPiece($i)->get_available_destinations($i);
+            
+            // Un pion sur sa ligne de départ doit pouvoir avancer de 1 ou 2 cases
+            $availabledestsMustBe = [$i + 8, $i + 16, $i+7, $i+9];
+            $testDests = [];
+            foreach ($movements as $movement) {
+                //fwrite(STDERR, print_r($movement, TRUE));
+                $this->assertContains($movement->get_dest(), $availabledestsMustBe);
+                $this->assertNotContains($movement->get_dest(), $testDests);
+                $testDests[] = $movement->get_dest();
+            }
+        }
+    
+        // Test des pions noirs
+        for ($i = 48; $i < 56; $i++) {
+            $nPlate = new Plate();
+            $nPlate->placePiece(new Pawn(false), $i);
+            $movements = $nPlate->getPiece($i)->get_available_destinations($i);
+    
+            // Un pion noir sur sa ligne de départ doit pouvoir avancer de 1 ou 2 cases
+            $availabledestsMustBe = [$i - 8, $i - 16, $i - 7, $i - 9];
+            $testDests = [];
+            foreach ($movements as $movement) {
+                $this->assertContains($movement->get_dest(), $availabledestsMustBe);
+                $this->assertNotContains($movement->get_dest(), $testDests);
+                $testDests[] = $movement->get_dest();
+            }
+        }
+    
+
+    }
+
+
 }
