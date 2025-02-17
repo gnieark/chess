@@ -2,7 +2,7 @@
 
 class Piece {
     // Couleur de la pièce (blanc ou noir)
-    private bool $color; //true = white false=black
+    protected bool $color; //true = white false=black
 
     public function __construct(bool $is_white) {
         $this->color = $is_white;
