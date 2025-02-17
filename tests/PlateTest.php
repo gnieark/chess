@@ -175,6 +175,22 @@ class PlateTest extends TestCase {
         }
         
     }
+    public function testRookMoves(): void {
+        for ($i = 0; $i < 64; $i++){
+            $origiX = $i % 8;
+            $origiY = intdiv($i, 8);
+
+            $nPlate = new Plate();
+            $nPlate->placePiece(new Rook(true), $i);
+            $movements = $nPlate->getPiece($i)->get_available_destinations($i);
+            foreach( $movements as $movement ){
+                $destX = $movement->get_dest() % 8;
+                $destY = intdiv( $movement->get_dest() , 8);
+                $this->assertTrue( $destX == $origiX || $destY == $origiY );
+            }
+
+        }
+    }
 
 
 
