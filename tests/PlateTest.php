@@ -139,62 +139,43 @@ class PlateTest extends TestCase {
     }
     public function testBishopMoves(): void {
 
-
-        $diags = [
-            [0],
-            [8, 1],
-            [16, 9, 2],
-            [24, 17, 10, 3],
-            [32, 25, 18, 11, 4],
-            [40, 33, 26, 19, 12, 5],
-            [48, 41, 34, 27, 20, 13, 6],
-            [56, 49, 42, 35, 28, 21, 14, 7],
-            [57, 50, 43, 36, 29, 22, 15],
-            [58, 51, 44, 37, 30, 23],
-            [59, 52, 45, 38, 31],
-            [60, 53, 46, 39],
-            [61, 54, 47],
-            [62, 55],
-            [63],
-            [56],
-            [48, 57],
-            [40, 49, 58],
-            [32, 41, 50, 59],
-            [24, 33, 42, 51, 60],
-            [16, 25, 34, 43, 52, 61],
-            [8, 17, 26, 35, 44, 53, 62],
-            [0, 9, 18, 27, 36, 45, 54, 63],
-            [1, 10, 19, 28, 37, 46, 55],
-            [2, 11, 20, 29, 38, 47],
-            [3, 12, 21, 30, 39],
-            [4, 13, 22, 31],
-            [5, 14, 23],
-            [6, 15],
-            [7]
-        ];
-
-
         for ($i = 0; $i < 64; $i++){
+                    
             $nPlate = new Plate();
             $nPlate->placePiece(new Bishop(true), $i);
             $movements = $nPlate->getPiece($i)->get_available_destinations($i);
-            $alldestsdiag = array();
-            foreach($diags as $diag){
-                if( in_array($i, $diag)   ){
-                    //foreach ( $movements as $movement ){
-                    //    var_dump($movement);
-                    //    $this->assertContains( $movement->get_dest(), $diag );
-                    //}
+           
+            $origiX = $i % 8;
+            $origiY = intdiv($i, 8);
 
+            foreach ($movements as $movement){
+                $destX = $movement-> get_dest() % 8;
+                $destY = intdiv($movement-> get_dest(), 8);
+
+                $majorX = ( $origiX < $destX );
+                $majorY = ( $origiY < $destY );
+
+                $stepX = $origiX;
+                $stepY = $origiY;
+                $find = false;
+
+                while( $stepX > -1 && $stepY > -1 && $stepX < 8 && $stepY < 8){
+                    $stepX = $majorX? $stepX + 1 : $stepX - 1;
+                    $stepY = $majorY? $stepY + 1 : $stepY - 1;
+                    
+                    if( $stepX == $destX && $stepY == $destY )
+                    {
+                        $find = true;
+                        break;
+                    }
                 }
-
+                $this->assertTrue($find);
+                
             }
-
-
         }
-
-
+        
     }
+
 
 
 }
