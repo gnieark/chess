@@ -28,14 +28,14 @@ class Movement {
         return $this; 
     }
     public function does_destCanBeAnOpponent():bool{
-        return $this->DestCanBeAnOpponent;
+        return $this->destCanBeAnOpponent;
     }
     public function set_destMustBeAnOpponent(bool $destMustBeAnOpponent): Movement{
-        $this->set_destMustBeAnOpponent = $destMustBeAnOpponent;
+        $this->destMustBeAnOpponent = $destMustBeAnOpponent;
         return $this;
     }
     public function does_destMustBeAnOpponent() : bool {
-        return $this->set_destMustBeAnOpponent;
+        return $this->destMustBeAnOpponent;
     }
     public function add_cell_to_path(int $cellId):Movement{
         $this->path[] = $cellId;

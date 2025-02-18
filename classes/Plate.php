@@ -7,8 +7,8 @@ class Plate {
     // Tableau bidimensionnel pour représenter les cases
     private array $board;
 
-    public function __construct() {
-        $this->initializeBoard(true);
+    public function __construct( $InitializeWithPieces = true  ) {
+        $this->initializeBoard( $InitializeWithPieces );
     }
 
     /**

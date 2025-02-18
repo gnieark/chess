@@ -193,8 +193,16 @@ class PlateTest extends TestCase {
     }
     public function testPlateAvailableMoves(): void {
         $nPlate = new Plate(true);
+        $this->assertEmpty( $nPlate->listAvailableDestinations(0) );
+        $this->assertCount( 2, $nPlate->listAvailableDestinations(8) );
+        
+        $nPlate->movePiece(8, 24);
+        $this->assertCount( 2, $nPlate->listAvailableDestinations(0) );
 
-
+        //test eat pawn
+        $nPlate->movePiece(57,41)->movePiece(24,32);
+        $this->assertCount( 2, $nPlate->listAvailableDestinations(32) );
+        $nPlate->movePiece(41,32);
     }
 
 
