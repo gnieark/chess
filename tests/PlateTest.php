@@ -191,6 +191,11 @@ class PlateTest extends TestCase {
 
         }
     }
+    public function testPlateAvailableMoves(): void {
+        $nPlate = new Plate(true);
+
+
+    }
 
 
 

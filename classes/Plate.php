@@ -34,7 +34,7 @@ class Plate {
 
     private function initializeBoard(bool $withPieces): void {
         $this->board = [];
-        for( $i = 0; $i<56; $i++){
+        for( $i = 0; $i<64; $i++){
             $this->board[$i] = null;
         }
         if( $withPieces ){
@@ -43,6 +43,30 @@ class Plate {
     }
     
     public function initializeBoardWithPieces(): void {
+
+
+        for( $i = 8; $i < 16; $i++ ){
+            $this->placePiece(new Pawn(true), $i);
+        }
+        for( $i = 48; $i < 56; $i++){
+            $this->placePiece(new Pawn(false), $i);
+        }
+        $this->placePiece(new Rook(true), 0);
+        $this->placePiece(new Rook(true), 7);
+        $this->placePiece(new Rook(false), 56);
+        $this->placePiece(new Rook(false), 63);
+        $this->placePiece(new Knight(true), 1);
+        $this->placePiece(new Knight(true), 6);
+        $this->placePiece(new Knight(false), 57);
+        $this->placePiece(new Knight(false), 62);
+        $this->placePiece(new Bishop(true), 2);
+        $this->placePiece(new Bishop(true), 5);
+        $this->placePiece(new Bishop(false), 58);
+        $this->placePiece(new Bishop(false), 61);
+        $this->placePiece(new Queen(true), 3);
+        $this->placePiece(new Queen(false), 60);
+        $this->placePiece(new King(true), 4);
+        $this->placePiece(new King(false), 59);
 
     }
 
@@ -67,13 +91,38 @@ class Plate {
         $this->board[$indexOrigi] = null;
         return $this;
     }
-/*
+
     public function listAvailableDestinations(int $origin): array{
-        $this->getPiece($origin)->getAvailableDestinationsIfEmptyFrom($origin);
+        $moves = $this->getPiece($origin)->get_available_destinations($origin);
+        $allowedMoves = array();
+        foreach( $moves as $move ){
+            //test path
+            foreach( $move->get_path() as $pathcell ){
+                if( !is_null($this->getPiece($pathcell)) ){
+                    continue 2;
+                }
+            }
 
+            //test dest cell
+            $dest = $this->getPiece( $move->get_dest() );
+            if(is_null($dest)){
+                if($move->does_destMustBeAnOpponent()){
+                    continue;
+                }
+            }elseif( $dest->isWhite() == $this->getPiece($origin)->isWhite() ){
+                //same color
+                continue;
+            }else{
+                //dest is opponent
+                if(!$move->does_destCanBeAnOpponent()){
+                    continue;
+                }
+            }
+            $allowedMoves[] = $move;
 
-
+        }
+        return $allowedMoves ;
         
     }
-*/
+
 }
