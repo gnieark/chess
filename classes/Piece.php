@@ -9,7 +9,9 @@ class Piece {
     }
 
 
-
+    public function getColor(): bool {
+        return $this->color;
+    }
     public function isWhite(): bool {
         return $this->color;
     }

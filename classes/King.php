@@ -1,7 +1,7 @@
 <?php
 class King extends Piece {
 
-    public function get_available_destinations($current): array {
+    public function get_moves($current): array {
         $mvts = array();
 
         $down = ($current > 7);

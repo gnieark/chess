@@ -92,8 +92,8 @@ class Plate {
         return $this;
     }
 
-    public function listAvailableDestinations(int $origin): array{
-        $moves = $this->getPiece($origin)->get_available_destinations($origin);
+    public function listAvailableMoves(int $origin): array{
+        $moves = $this->getPiece($origin)->get_moves($origin);
         $allowedMoves = array();
         foreach( $moves as $move ){
             //test path
@@ -124,5 +124,19 @@ class Plate {
         return $allowedMoves ;
         
     }
+    public function isCheck(bool $color) : bool {
+        for($i=0; $i < 64; $i++ ){
+            if( !is_null($this->getPiece($i)) &&  $this->getPiece($i)->getColor() == !$color){
+                foreach( $this->listAvailableMoves($i)  as $move ){
+
+
+                }
+
+
+            }
+
+        }
+    }
+    
 
 }

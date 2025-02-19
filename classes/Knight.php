@@ -13,7 +13,7 @@ class Knight extends Piece {
      */
 
 
-    public function get_available_destinations($current): array {
+    public function get_moves($current): array {
 
         $moves = [
             [-2, -1], [-2, 1], [2, -1], [2, 1],

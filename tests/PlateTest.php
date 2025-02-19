@@ -47,7 +47,7 @@ class PlateTest extends TestCase {
         for($i = 0; $i<64; $i++ ){
             $nPlate = new Plate();
             $nPlate -> placePiece(new King(false), $i);
-            $movements  = $nPlate -> getPiece($i)->get_available_destinations($i);
+            $movements  = $nPlate -> getPiece($i)->get_moves($i);
             $this->assertLessThan(9, count($movements) );
             foreach($movements as $movement){
                 $this->assertGreaterThan(-1, $movement->get_dest());
@@ -56,7 +56,7 @@ class PlateTest extends TestCase {
         }
         $nPlate = new Plate();
         $nPlate -> placePiece(new King(false), 1);
-        $movements  = $nPlate -> getPiece(1)->get_available_destinations(1);
+        $movements  = $nPlate -> getPiece(1)->get_moves(1);
         $availabledestsMustBe = array(0,2,8,9,10);
         $testDests = array();
         foreach($movements as $movement){
@@ -67,7 +67,7 @@ class PlateTest extends TestCase {
 
         $nPlate = new Plate();
         $nPlate -> placePiece(new King(false), 63);
-        $movements  = $nPlate -> getPiece(63)->get_available_destinations(63);
+        $movements  = $nPlate -> getPiece(63)->get_moves(63);
         $availabledestsMustBe = array(62,54,55);
         $testDests = array();
         foreach($movements as $movement){
@@ -81,7 +81,7 @@ class PlateTest extends TestCase {
         for($i = 0; $i<64; $i++ ){
             $nPlate = new Plate();
             $nPlate -> placePiece(new Knight(false), $i);
-            $movements  = $nPlate -> getPiece($i)->get_available_destinations($i);
+            $movements  = $nPlate -> getPiece($i)->get_moves($i);
             $this->assertLessThan(9, count($movements) );
             foreach($movements as $movement){
                 $this->assertGreaterThan(-1, $movement->get_dest());
@@ -91,7 +91,7 @@ class PlateTest extends TestCase {
 
         $nPlate = new Plate();
         $nPlate -> placePiece(new Knight(false), 63);
-        $movements  = $nPlate -> getPiece(63)->get_available_destinations(63);
+        $movements  = $nPlate -> getPiece(63)->get_moves(63);
         $availabledestsMustBe = array(53,46);
         $testDests = array();
         foreach($movements as $movement){
@@ -106,7 +106,7 @@ class PlateTest extends TestCase {
         for ($i = 8; $i < 16; $i++) {
             $nPlate = new Plate();
             $nPlate->placePiece(new Pawn(true), $i);
-            $movements = $nPlate->getPiece($i)->get_available_destinations($i);
+            $movements = $nPlate->getPiece($i)->get_moves($i);
             
             // Un pion sur sa ligne de départ doit pouvoir avancer de 1 ou 2 cases
             $availabledestsMustBe = [$i + 8, $i + 16, $i+7, $i+9];
@@ -123,7 +123,7 @@ class PlateTest extends TestCase {
         for ($i = 48; $i < 56; $i++) {
             $nPlate = new Plate();
             $nPlate->placePiece(new Pawn(false), $i);
-            $movements = $nPlate->getPiece($i)->get_available_destinations($i);
+            $movements = $nPlate->getPiece($i)->get_moves($i);
     
             // Un pion noir sur sa ligne de départ doit pouvoir avancer de 1 ou 2 cases
             $availabledestsMustBe = [$i - 8, $i - 16, $i - 7, $i - 9];
@@ -143,7 +143,7 @@ class PlateTest extends TestCase {
                     
             $nPlate = new Plate();
             $nPlate->placePiece(new Bishop(true), $i);
-            $movements = $nPlate->getPiece($i)->get_available_destinations($i);
+            $movements = $nPlate->getPiece($i)->get_moves($i);
            
             $origiX = $i % 8;
             $origiY = intdiv($i, 8);
@@ -182,7 +182,7 @@ class PlateTest extends TestCase {
 
             $nPlate = new Plate();
             $nPlate->placePiece(new Rook(true), $i);
-            $movements = $nPlate->getPiece($i)->get_available_destinations($i);
+            $movements = $nPlate->getPiece($i)->get_moves($i);
             foreach( $movements as $movement ){
                 $destX = $movement->get_dest() % 8;
                 $destY = intdiv( $movement->get_dest() , 8);
@@ -193,15 +193,15 @@ class PlateTest extends TestCase {
     }
     public function testPlateAvailableMoves(): void {
         $nPlate = new Plate(true);
-        $this->assertEmpty( $nPlate->listAvailableDestinations(0) );
-        $this->assertCount( 2, $nPlate->listAvailableDestinations(8) );
+        $this->assertEmpty( $nPlate->listAvailableMoves(0) );
+        $this->assertCount( 2, $nPlate->listAvailableMoves(8) );
         
         $nPlate->movePiece(8, 24);
-        $this->assertCount( 2, $nPlate->listAvailableDestinations(0) );
+        $this->assertCount( 2, $nPlate->listAvailableMoves(0) );
 
         //test eat pawn
         $nPlate->movePiece(57,41)->movePiece(24,32);
-        $this->assertCount( 2, $nPlate->listAvailableDestinations(32) );
+        $this->assertCount( 2, $nPlate->listAvailableMoves(32) );
         $nPlate->movePiece(41,32);
     }
 
