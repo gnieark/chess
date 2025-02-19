@@ -1,6 +1,10 @@
 <?php
 class Pawn extends Piece{
 
+    public function get_unicode_char(){
+        return( $this->color? "♙" : "♟");
+    }
+
     public function get_moves($current): array {
         $mvts = array();
         if( $this -> isWhite() ){

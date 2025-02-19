@@ -125,17 +125,32 @@ class Plate {
         
     }
     public function isCheck(bool $color) : bool {
+
         for($i=0; $i < 64; $i++ ){
             if( !is_null($this->getPiece($i)) &&  $this->getPiece($i)->getColor() == !$color){
                 foreach( $this->listAvailableMoves($i)  as $move ){
-
+                    if( is_a( $this->getPiece( $move->get_dest() ), "King") 
+                        &&  $this->getPiece( $move->get_dest() )->getColor() == $color){
+                        return true;
+                    }
 
                 }
-
-
             }
 
         }
+        return false;
+    }
+    public function __toString(){
+        $str="|";
+        for( $i= 7; $i > -1; $i-- ){
+            for( $j = 0; $j < 8; $j++){
+                $str.= is_null( $this->getPiece($i * 8 + $j) ) ? " " : $this->getPiece($i * 8 + $j)->get_unicode_char();
+                $str.="|";
+            }
+            $str.="\n|";
+        }
+        return $str;
+       
     }
     
 

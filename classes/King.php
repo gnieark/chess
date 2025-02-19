@@ -1,5 +1,8 @@
 <?php
 class King extends Piece {
+    public function get_unicode_char(){
+        return( $this->color? "♔" : "♚");
+    }
 
     public function get_moves($current): array {
         $mvts = array();

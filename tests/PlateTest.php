@@ -204,6 +204,34 @@ class PlateTest extends TestCase {
         $this->assertCount( 2, $nPlate->listAvailableMoves(32) );
         $nPlate->movePiece(41,32);
     }
+    public function testIsCheck(): void {
+        $nPlate = new Plate(true);
+
+       
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+        $nPlate->movePiece(11,27);
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+        $nPlate->movePiece(51,43);
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+        $nPlate->movePiece(15,23);
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+        $nPlate->movePiece(60,33);
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+        $nPlate->movePiece(6,21);
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+
+        $nPlate->movePiece(33,25);
+        print_r($nPlate->__toString());
+        $this->AssertTrue($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+
+    }
 
 
 
