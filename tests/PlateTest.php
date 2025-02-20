@@ -35,9 +35,11 @@ class PlateTest extends TestCase {
 
     }
     public function testPlacePlieces(): void {
-        $nPlate = new Plate();
+        $nPlate = new Plate(false);
         $nPlate -> placePiece(new King(false), 43);
-        $nPlate -> movePiece(43,50);
+        $move = new Movement();
+        $move->set_origin(43)->set_dest(50);
+        $nPlate->applyMovement($move);
         $this->assertNull($nPlate->getPiece(43));
         $this->assertInstanceOf('King', $nPlate->getPiece(50) );
         
@@ -45,7 +47,7 @@ class PlateTest extends TestCase {
     }
     public function testKingMoves(): void {
         for($i = 0; $i<64; $i++ ){
-            $nPlate = new Plate();
+            $nPlate = new Plate(false);
             $nPlate -> placePiece(new King(false), $i);
             $movements  = $nPlate -> getPiece($i)->get_moves($i);
             $this->assertLessThan(9, count($movements) );
@@ -54,7 +56,7 @@ class PlateTest extends TestCase {
                 $this->assertLessThan(64, $movement->get_dest());
             }
         }
-        $nPlate = new Plate();
+        $nPlate = new Plate(false);
         $nPlate -> placePiece(new King(false), 1);
         $movements  = $nPlate -> getPiece(1)->get_moves(1);
         $availabledestsMustBe = array(0,2,8,9,10);
@@ -65,7 +67,7 @@ class PlateTest extends TestCase {
             $testDests[] = $movement->get_dest();
         }
 
-        $nPlate = new Plate();
+        $nPlate = new Plate(false);
         $nPlate -> placePiece(new King(false), 63);
         $movements  = $nPlate -> getPiece(63)->get_moves(63);
         $availabledestsMustBe = array(62,54,55);
@@ -79,7 +81,7 @@ class PlateTest extends TestCase {
 
     public function testKnightMoves(): void {
         for($i = 0; $i<64; $i++ ){
-            $nPlate = new Plate();
+            $nPlate = new Plate(false);
             $nPlate -> placePiece(new Knight(false), $i);
             $movements  = $nPlate -> getPiece($i)->get_moves($i);
             $this->assertLessThan(9, count($movements) );
@@ -89,7 +91,7 @@ class PlateTest extends TestCase {
             }
         }
 
-        $nPlate = new Plate();
+        $nPlate = new Plate(false);
         $nPlate -> placePiece(new Knight(false), 63);
         $movements  = $nPlate -> getPiece(63)->get_moves(63);
         $availabledestsMustBe = array(53,46);
@@ -112,7 +114,6 @@ class PlateTest extends TestCase {
             $availabledestsMustBe = [$i + 8, $i + 16, $i+7, $i+9];
             $testDests = [];
             foreach ($movements as $movement) {
-                //fwrite(STDERR, print_r($movement, TRUE));
                 $this->assertContains($movement->get_dest(), $availabledestsMustBe);
                 $this->assertNotContains($movement->get_dest(), $testDests);
                 $testDests[] = $movement->get_dest();
@@ -141,7 +142,7 @@ class PlateTest extends TestCase {
 
         for ($i = 0; $i < 64; $i++){
                     
-            $nPlate = new Plate();
+            $nPlate = new Plate(false);
             $nPlate->placePiece(new Bishop(true), $i);
             $movements = $nPlate->getPiece($i)->get_moves($i);
            
@@ -179,8 +180,7 @@ class PlateTest extends TestCase {
         for ($i = 0; $i < 64; $i++){
             $origiX = $i % 8;
             $origiY = intdiv($i, 8);
-
-            $nPlate = new Plate();
+            $nPlate = new Plate(false);
             $nPlate->placePiece(new Rook(true), $i);
             $movements = $nPlate->getPiece($i)->get_moves($i);
             foreach( $movements as $movement ){
@@ -196,38 +196,52 @@ class PlateTest extends TestCase {
         $this->assertEmpty( $nPlate->listAvailableMoves(0) );
         $this->assertCount( 2, $nPlate->listAvailableMoves(8) );
         
-        $nPlate->movePiece(8, 24);
+
+        $move = new Movement();
+        $move->set_origin(8)->set_dest(24);
+        $nPlate->applyMovement($move);
         $this->assertCount( 2, $nPlate->listAvailableMoves(0) );
 
         //test eat pawn
-        $nPlate->movePiece(57,41)->movePiece(24,32);
-        $this->assertCount( 2, $nPlate->listAvailableMoves(32) );
-        $nPlate->movePiece(41,32);
+        print_r($nPlate->__toString());
+        $nPlate->applyMovement( new Movement(49,33) );
+        print_r($nPlate->__toString());
+        $this->assertCount( 2, $nPlate->listAvailableMoves(33) );
+        $nPlate->applyMovement( new Movement(24,33) );
+       
+       
     }
+    
     public function testIsCheck(): void {
         $nPlate = new Plate(true);
 
        
         $this->AssertFalse($nPlate->isCheck(true));
         $this->AssertFalse($nPlate->isCheck(false));
-        $nPlate->movePiece(11,27);
-        $this->AssertFalse($nPlate->isCheck(true));
-        $this->AssertFalse($nPlate->isCheck(false));
-        $nPlate->movePiece(51,43);
-        $this->AssertFalse($nPlate->isCheck(true));
-        $this->AssertFalse($nPlate->isCheck(false));
-        $nPlate->movePiece(15,23);
-        $this->AssertFalse($nPlate->isCheck(true));
-        $this->AssertFalse($nPlate->isCheck(false));
-        $nPlate->movePiece(60,33);
-        $this->AssertFalse($nPlate->isCheck(true));
-        $this->AssertFalse($nPlate->isCheck(false));
-        $nPlate->movePiece(6,21);
+
+        $nPlate->applyMovement( new Movement(11,27) );
         $this->AssertFalse($nPlate->isCheck(true));
         $this->AssertFalse($nPlate->isCheck(false));
 
-        $nPlate->movePiece(33,25);
-        print_r($nPlate->__toString());
+        $nPlate->applyMovement( new Movement(51,43) );
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+
+        $nPlate->applyMovement( new Movement(15,23) );
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+
+        $nPlate->applyMovement( new Movement(60,33) );
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+
+  
+        $nPlate->applyMovement( new Movement(6,21) );
+        $this->AssertFalse($nPlate->isCheck(true));
+        $this->AssertFalse($nPlate->isCheck(false));
+
+        $nPlate->applyMovement( new Movement(33,25) );
+     
         $this->AssertTrue($nPlate->isCheck(true));
         $this->AssertFalse($nPlate->isCheck(false));
 

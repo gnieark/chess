@@ -7,7 +7,15 @@ class Movement {
     private $destCanBeAnOpponent = true; //If true the destination cell can contain an oppenent(eaten)
     private $destMustBeAnOpponent = false; //Can move to the dest only to eat opponent
 
-    public function __construct(){
+    public function __construct(int $origin = null, int $dest = null){
+
+        if(!is_null($origin)){
+            $this->set_origin($origin);
+        }
+        if(!is_null($dest)){
+            $this->set_dest($dest);
+        }
+
     }
     public function set_origin( int $origin ) :Movement{
         $this->origin = $origin;

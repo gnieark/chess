@@ -83,7 +83,7 @@ class Plate {
             return $this->board[$cellIndex];
     }
 
-    public function movePiece(int $indexOrigi, $indexDest) : Plate{
+    private function movePiece(int $indexOrigi, $indexDest) : Plate{
         $this->board[$indexDest] = $this->board[$indexOrigi];
         $this->board[$indexOrigi] = null;
         return $this;
@@ -167,10 +167,8 @@ class Plate {
                         &&  $this->getPiece( $move->get_dest() )->getColor() == $color){
                         return true;
                     }
-
                 }
             }
-
         }
         return false;
     }
