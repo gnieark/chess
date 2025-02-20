@@ -1,18 +1,10 @@
 <?php
 
 class Plate {
-    // Dimensions du plateau (constantes)
-    private const SIZE = 8;
 
-    // Tableau bidimensionnel pour représenter les cases
-    private array $board;
 
-    public function __construct( $InitializeWithPieces = true  ) {
-        $this->initializeBoard( $InitializeWithPieces );
-    }
-
-    /**
-     * Initialise le plateau avec des cases vides.
+    //array containing plate cells indexed as:
+    /** 
     * 56  57  58  59  60  61  62  63  
     * 48  49  50  51  52  53  54  55  
     * 40  41  42  43  44  45  46  47  
@@ -22,6 +14,13 @@ class Plate {
     * 8   9  10  11  12  13  14  15  
     * 0   1   2   3   4   5   6   7  
      */
+    private array $board;
+
+    public function __construct( $InitializeWithPieces = true  ) {
+        $this->initializeBoard( $InitializeWithPieces );
+    }
+
+
 
     public function getCellIndexByCoords(int $x,int $y) :int{
         return $x + $y *8;
@@ -81,20 +80,44 @@ class Plate {
     }
 
     public function getPiece(int $cellIndex ): ?Piece {
-      
             return $this->board[$cellIndex];
-        
-        return null;
     }
+
     public function movePiece(int $indexOrigi, $indexDest) : Plate{
         $this->board[$indexDest] = $this->board[$indexOrigi];
         $this->board[$indexOrigi] = null;
         return $this;
     }
 
-    public function listAvailableMoves(int $origin): array{
+    public function applyMovement(Movement $movement, bool $checkIfAllowed=true ): Plate {
+        if($checkIfAllowed ){
+            if(is_null( $this->getPiece( $movement->get_origin() ) )  ){
+                return false;
+            }
+            $disallowed = true;
+            foreach($this->listAvailableMoves( $movement->get_origin() ) as $availableMove){
+                //only compare dest and origin, not path and others parameters
+                if( $availableMove->get_dest() == $movement->get_dest() 
+                    && $availableMove->get_origin() == $movement->get_origin() 
+                ){
+                    $disallowed = false;
+                    break;
+                }
+
+            }
+            if($disallowed){
+                return false;
+            }
+        }
+        return $this->movePiece($movement->get_origin(), $movement->get_dest());
+    }
+
+    public function listAvailableMoves(int $origin, bool $checkcheck = true): array {
+
         $moves = $this->getPiece($origin)->get_moves($origin);
         $allowedMoves = array();
+        
+
         foreach( $moves as $move ){
             //test path
             foreach( $move->get_path() as $pathcell ){
@@ -118,17 +141,28 @@ class Plate {
                     continue;
                 }
             }
+
+            //test if after move it's check.
+            if($checkcheck){
+                $testPlate = clone $this;           
+                if( $testPlate
+                        ->applyMovement( $move, false )
+                        ->isCheck( $this->getPiece($origin)->isWhite() ) ){
+                    continue;
+                }
+            }
+
             $allowedMoves[] = $move;
 
         }
         return $allowedMoves ;
         
     }
-    public function isCheck(bool $color) : bool {
 
+    public function isCheck(bool $color) : bool {
         for($i=0; $i < 64; $i++ ){
             if( !is_null($this->getPiece($i)) &&  $this->getPiece($i)->getColor() == !$color){
-                foreach( $this->listAvailableMoves($i)  as $move ){
+                foreach( $this->listAvailableMoves($i, false)  as $move ){
                     if( is_a( $this->getPiece( $move->get_dest() ), "King") 
                         &&  $this->getPiece( $move->get_dest() )->getColor() == $color){
                         return true;
@@ -140,6 +174,7 @@ class Plate {
         }
         return false;
     }
+
     public function __toString(){
         $str="|";
         for( $i= 7; $i > -1; $i-- ){
