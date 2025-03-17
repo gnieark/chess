@@ -21,7 +21,7 @@ class Plate {
     private $rook56moved = false;
     private $rook63moved = false;
     private $king4moved = false;
-    private $king59moved = false;
+    private $king60moved = false;
 
 
     private function is_array_of_cells_empty($cells) :bool{
@@ -46,25 +46,42 @@ class Plate {
         return false;
     }
 
-    public function is_white_little_castling_available():bool{
-        if($rook7moved || $king4moved ){
+
+    private function is_castling_available(array $emptyAndUnthreatedCells, bool $opponentColor,bool $rookMoved, bool $kingMoved ): bool{
+        if( $rookMoved || $kingMoved ){
+            return false;
+        }
+        if(!$this->is_array_of_cells_empty( $emptyAndUnthreatedCells) ){
             return false;
         }
 
-        if(!$this->is_array_of_cells_empty( array(5,6) ) ){
-            return false;
-        }
-        if ($this->isCheck( true )){
+        if ($this->isCheck( !$opponentColor )){
             return false;
         }
         //cells that mustnot be targetted
-        foreach( array(5,6) as $cell){
-            if($this->is_cell_threat_by_opponent(false,$cell)  ){
+        foreach( $emptyAndUnthreatedCells as $cell){
+            if($this->is_cell_threat_by_opponent($opponentColor,$cell)  ){
                 return false;
             }
         }
-        return true; 
+
+        return true;
     }
+
+    public function is_white_little_castling_available():bool{
+        return $this->is_castling_available( array(5,6), false, $this->rook7moved, $this->king4moved );
+    }
+    public function is_white_big_castling_available():bool{
+        return $this->is_castling_available( array(1,2,3), false, $this->rook0moved, $this->king4moved );
+    }
+    public function is_black_little_castling_available():bool{
+        return $this->is_castling_available( array(61,62), true, $this->$rook63moved, $this->king60moved );
+    }
+    public function is_black_big_castling_available():bool{
+        return $this->is_castling_available( array(57,58,59), true, $this->$rook56moved, $this->king60moved );
+    }
+
+
 
     public function __construct( $InitializeWithPieces = true  ) {
         $this->initializeBoard( $InitializeWithPieces );
@@ -111,9 +128,9 @@ class Plate {
         $this->placePiece(new Bishop(false), 58);
         $this->placePiece(new Bishop(false), 61);
         $this->placePiece(new Queen(true), 3);
-        $this->placePiece(new Queen(false), 60);
+        $this->placePiece(new Queen(false), 59);
         $this->placePiece(new King(true), 4);
-        $this->placePiece(new King(false), 59);
+        $this->placePiece(new King(false), 60);
 
     }
 
