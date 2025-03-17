@@ -16,11 +16,59 @@ class Plate {
      */
     private array $board;
 
+    private $rook0moved = false;
+    private $rook7moved = false;
+    private $rook56moved = false;
+    private $rook63moved = false;
+    private $king4moved = false;
+    private $king59moved = false;
+
+
+    private function is_array_of_cells_empty($cells) :bool{
+        foreach( $cells as $cell ){
+            if( !is_null($this->board($cell)) ){
+                return false;
+            }
+        }
+        return true;
+    }
+    private function is_cell_threat_by_opponent(bool $opponentcolor,int $cell):bool{
+        for($i=0; $i < 64; $i++ ){
+            if( !is_null($this->getPiece($i)) &&  $this->getPiece($i)->getColor() == $opponentcolor){
+                $moves = $this->listAvailableMoves($i,false);
+                foreach($moves as $move){
+                    if( $move->get_dest() == $cell ){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function is_white_little_castling_available():bool{
+        if($rook7moved || $king4moved ){
+            return false;
+        }
+
+        if(!$this->is_array_of_cells_empty( array(5,6) ) ){
+            return false;
+        }
+        if ($this->isCheck( true )){
+            return false;
+        }
+        //cells that mustnot be targetted
+        foreach( array(5,6) as $cell){
+            if($this->is_cell_threat_by_opponent(false,$cell)  ){
+                return false;
+            }
+        }
+        return true; 
+    }
+
     public function __construct( $InitializeWithPieces = true  ) {
         $this->initializeBoard( $InitializeWithPieces );
     }
-
-
 
     public function getCellIndexByCoords(int $x,int $y) :int{
         return $x + $y *8;
@@ -185,6 +233,7 @@ class Plate {
         return $str;
        
     }
+
     
 
 }

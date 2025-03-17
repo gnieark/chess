@@ -246,6 +246,9 @@ class PlateTest extends TestCase {
         $this->AssertFalse($nPlate->isCheck(false));
 
     }
+    function testselfCheckIfForbidden(): void{
+        $nPlate = new Plate(true);
+    }
 
 
 
